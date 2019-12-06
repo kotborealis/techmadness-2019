@@ -6,7 +6,7 @@ import {useFetchAuthToken} from '../api/api';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {QrViewer} from '../components/QrViewer/QrViewer';
 
-export const RouteGenerate = ({}) => {
+export const DesktopApp = ({}) => {
     const [hashTime, setHashTime] = useState(0);
 
     const calculateHashTime = (ts = Date.now()) => (ts/1000/5)|0;

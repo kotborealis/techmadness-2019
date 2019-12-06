@@ -2,19 +2,23 @@ import React from 'react';
 import {render} from 'react-dom';
 import "!style-loader!css-loader!bootstrap/dist/css/bootstrap.min.css";
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
-import {RouteReader} from './routes/reader';
+import {MobileApp} from './routes/mobileApp';
 import Container from '@material-ui/core/Container';
-import {RouteGenerate} from './routes/generate';
+import {DesktopApp} from './routes/desktopApp';
+import {LandingPage} from './routes/ladingPage';
 
 render(
     <Container>
         <BrowserRouter basename={process.env.PUBLIC_PATH}>
             <Switch>
-                <Route path="/reader">
-                    <RouteReader/>
+                <Route exact path="/">
+                    <LandingPage/>
                 </Route>
-                <Route path="/generate">
-                    <RouteGenerate/>
+                <Route path="/mobile">
+                    <MobileApp/>
+                </Route>
+                <Route path="/desktop">
+                    <DesktopApp/>
                 </Route>
             </Switch>
         </BrowserRouter>

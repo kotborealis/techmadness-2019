@@ -3,7 +3,7 @@ import {QrReader} from '../components/QrReader/QrReader';
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography';
 
-export const RouteReader = ({}) => {
+export const MobileApp = ({}) => {
     const [token, setToken] = useState(null);
 
     return (<Paper>
