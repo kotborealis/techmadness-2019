@@ -7,6 +7,7 @@ const usePreciseTimer = (handler, periodInMilliseconds, activityFlag) => {
 
     useEffect(() => {
         savedCallback.current = handler;
+        handler();
     }, [handler]);
 
     useEffect(() => {
@@ -25,6 +26,8 @@ const usePreciseTimer = (handler, periodInMilliseconds, activityFlag) => {
             };
         }
     }, [periodInMilliseconds, activityFlag, timeDelay]);
+
+
 };
 
 export default usePreciseTimer;
