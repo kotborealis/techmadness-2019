@@ -1,14 +1,7 @@
 module.exports = [
     {
         context: ['/api/v1'],
-        target: 'http://127.0.0.1:3000',
-        pathRewrite: {'^/api/v1' : ''},
-    },
-    //{
-    //    bypass: (req, res) => {
-    //        if(req.url !== '/data.php') return '/index.html';
-    //
-    //        res.json({});
-    //    }
-    //}
+        target: 'http://185.251.38.131:8080',
+        pathRewrite: {'^/api/v1/' : '/rest/api/'},
+    }
 ];

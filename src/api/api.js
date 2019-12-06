@@ -1,12 +1,16 @@
 import {useEffect, useState} from 'react';
 
+const encodeGetParams = p =>
+    Object.entries(p).map(kv => kv.map(encodeURIComponent).join("=")).join("&");
+
+export const API_URL = `/api/v1/`;
+export const apiUrl = (path, query = {}) => `${API_URL}/${[path].flat().join('/')}?${encodeGetParams(query)}`;
+
 export const fetchAuthToken =
     async ({
                time
            }) => {
-        const res = await fetch(
-            `http://185.251.38.131:8080/rest/api/getHashByTime?time=${time}`
-        );
+        const res = await fetch(apiUrl(`getHashByTime`, {time}));
         return await res.text();
     };
 
