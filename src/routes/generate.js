@@ -19,22 +19,6 @@ export const RouteGenerate = ({}) => {
     }, 1000 * 5, true);
 
     const [token, tokenLoading, tokenError] = useFetchAuthToken({time: hashTime}, [hashTime]);
-
-    //const fetchToken = () => {
-    //    const hash_time = ((Date.now()/1000/5)|0);
-    //    void (async () => {
-    //        const res = await fetch(
-    //            `http://185.251.38.131:8080/rest/api/getHashByTime?time=${hash_time}`
-    //        );
-    //        const token = await res.text();
-    //        setToken(token);
-    //    })();
-    //};
-    //
-    //
-    //
-    //usePreciseTimer(fetchToken, 1000 * 5, true);
-
     return (<Paper>
         <Typography variant="h5">
             Генерация
