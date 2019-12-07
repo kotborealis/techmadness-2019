@@ -6,7 +6,6 @@ import {useFetchAuthToken} from '../api/api';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {QrViewer} from '../components/QrViewer/QrViewer';
 import {SoundTransmitter} from '../components/SoundTransmitter/SoundTransmitter';
-import Button from '@material-ui/core/Button';
 
 const quiet = require('quietjs-bundle');
 
