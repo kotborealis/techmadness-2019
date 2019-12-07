@@ -1,8 +1,7 @@
-import {useEffect, useState} from 'react';
-
 const encodeGetParams = p =>
     Object.entries(p).map(kv => kv.map(encodeURIComponent).join("=")).join("&");
 
+//export const API_URL = process.env.API_URL;
 export const API_URL = `/api/v1/`;
 export const apiUrl = (path, query = {}) => `${API_URL}/${[path].flat().join('/')}?${encodeGetParams(query)}`;
 
@@ -18,28 +17,28 @@ export const fetchAuthToken =
         return data.content;
     };
 
-export const useFetchAuthToken =
-    (props, deps = []) => {
+export const authApprove = (userId) => new Promise((resolve, reject) => {
+    console.log("Called approve with", userId);
+    if(!userId) return void resolve();
+    const sse = new EventSource(API_URL + `connectToApprove?userId=${userId}`);
+    sse.addEventListener('message', (event) => {
+        const data = JSON.parse(event.data);
+        console.log("SSE GOT", data);
+        sse.close();
+        if(data.success) resolve(data.content);
+        else reject(data);
+    });
+});
 
-        const [data, setData] = useState(null);
-        const [error, setError] = useState(null);
-        const [loading, setLoading] = useState(true);
+export const mobileApprove =
+    async ({
+               token
+           }) => {
 
-        useEffect(() => {
-            void (async () => {
-                setLoading(true);
-                try{
-                    setData(await fetchAuthToken(props));
-                }
-                catch(error){
-                    setError(error);
-                }
-                finally{
-                    setLoading(false);
-                }
-            })();
-        }, deps);
+        const res = await fetch(apiUrl(`mobile/approve`, {hash: token}));
+        const data = await res.json();
 
-        return [data, loading, error];
+        if(!data.success) throw data;
 
+        return data.content;
     };

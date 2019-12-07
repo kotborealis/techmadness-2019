@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Typography from '@material-ui/core/Typography';
 import {SoundReceiver} from '../components/SoundReceiver/SoundReceiver';
 import {useStore} from '../store/store';
@@ -19,6 +19,7 @@ import Button from '@material-ui/core/Button';
 
 import RosbankLogo from '../assets/rosbank-logo.png';
 import DevicesIcon from '@material-ui/icons/Devices';
+import {mobileApprove} from '../api/api';
 
 export const MobileApp = ({}) => {
     const libquietProfile = useStore(state => state.libquietProfile);
@@ -29,11 +30,17 @@ export const MobileApp = ({}) => {
     const [step, setStep] = useState("initial");
 
     const handleToken = (source, token) => {
-        if(!token || step !== "scan") return;
+        console.log("Handle token", token, step);
+        if(!token) return;
 
         setToken(token);
         setStep("success");
     };
+
+    useEffect(() => {
+        if(!token) return;
+        void mobileApprove({token});
+    }, [token]);
 
     return (
         <div className={classes.root}>

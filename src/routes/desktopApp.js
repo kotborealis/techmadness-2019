@@ -13,6 +13,7 @@ import CameraIcon from '@material-ui/icons/CameraAlt';
 import MicIcon from '@material-ui/icons/Mic';
 import SpeakerPhoneIcon from '@material-ui/icons/SpeakerPhone';
 import Container from '@material-ui/core/Container';
+import {authApprove} from '../api/api';
 
 export const DesktopApp = ({}) => {
     const libquietProfile = useStore(state => state.libquietProfile);
@@ -20,7 +21,11 @@ export const DesktopApp = ({}) => {
     const libquietLoaded = useStore(state => !state.libquietLoading);
     const fetchAuthToken = useStore(state => state.authToken.fetch);
     const tokenLoading = useStore(state => state.authToken.loading);
-    const token = useStore(state => state.authToken.data);
+    const authTokenDataBlyad = useStore(state => state.authToken.data);
+    const token = useStore(state => state.authToken.data ? state.authToken.data.hash : null);
+    const userId = useStore(state => state.authToken.data ? state.authToken.data.id : null);
+
+    console.log({authTokenDataBlyad, token, userId});
 
     const [showToken, setShowToken] = useState(false);
 
@@ -36,6 +41,15 @@ export const DesktopApp = ({}) => {
         if(!showToken) return;
         fetchAuthToken({time: calculateHashTime()});
     }, [showToken]);
+
+    useEffect(() => {
+        if(!showToken) return;
+        (async () => {
+            console.log("AWAIT APPROVE");
+            const data = await authApprove(userId);
+            console.log("AUTH APPROVE DONE", data);
+        })();
+    }, [showToken, userId]);
 
     return (
         <Container>

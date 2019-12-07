@@ -148,6 +148,7 @@ module.exports = (env = {prod: false}) => {
 
             new webpack.DefinePlugin({
                 'process.env.PUBLIC_PATH': JSON.stringify(PUBLIC_PATH),
+                'process.env.API_URL': JSON.stringify("http://185.251.38.131:8080/rest/api/"),
             }),
 
             new webpack.ProvidePlugin({ BrowserFS: 'bfsGlobal', process: 'processGlobal', Buffer: 'bufferGlobal' })
@@ -169,7 +170,8 @@ module.exports = (env = {prod: false}) => {
             openPage: '',
             overlay: true,
             proxy: mockApi,
-            historyApiFallback: true
+            historyApiFallback: true,
+            compress: false
         }
     };
 
