@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {QrReader} from '../components/QrReader/QrReader';
-import Paper from '@material-ui/core/Paper'
+import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import {SoundReceiver} from '../components/SoundReceiver/SoundReceiver';
 import {useStore} from '../store/store';
@@ -10,13 +10,18 @@ export const MobileApp = ({}) => {
 
     const [token, setToken] = useState(null);
 
+    const handleToken = (source, token) => {
+        if(!token) return;
+        setToken(token);
+    };
+
     return (<Paper>
         <Typography variant="h5">
             Авторизация
         </Typography>
 
         <QrReader
-            onResult={setToken}
+            onResult={(data) => handleToken("qr", data)}
             previewStyle={{
                 width: 320,
                 height: 320
@@ -25,7 +30,7 @@ export const MobileApp = ({}) => {
 
         <SoundReceiver
             on={libquietLoaded}
-            onData={(...data) => console.log(data)}
+            onData={(data) => handleToken("sound", data)}
         />
 
         <Typography>
