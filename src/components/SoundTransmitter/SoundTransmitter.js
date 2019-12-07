@@ -30,7 +30,7 @@ export const SoundTransmitter =
         }, [value, on]);
 
         useEffect(() => {
-            if(!on) return;
+            if(!enable.current) return;
 
             transmit.current = Quiet.transmitter({
                 profile,

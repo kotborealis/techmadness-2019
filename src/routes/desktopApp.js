@@ -108,8 +108,6 @@ export const DesktopApp = ({}) => {
         })();
     }, [step, userId]);
 
-    console.log(libquietLoaded && step === "code");
-
     return (
         <Container>
             <Paper>
