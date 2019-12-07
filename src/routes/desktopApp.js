@@ -41,10 +41,9 @@ const ScreenInitial = ({onDone}) =>
         <AuthDescription/>
     </Typography>;
 
-const ScreenCode = ({token, libquietLoaded, libquietProfile}) =>
+const ScreenCode = ({token, libquietLoaded, libquietProfile, step}) =>
     <>
         <QrViewer value={token}/>
-        <SoundTransmitter value={token} on={libquietLoaded} profile={libquietProfile}/>
         <SpeakerPhoneIcon fontSize="large"/>
         <Typography align="center">
             Держите устройство поблизости или отсканируйте QR-код
@@ -109,6 +108,8 @@ export const DesktopApp = ({}) => {
         })();
     }, [step, userId]);
 
+    console.log(libquietLoaded && step === "code");
+
     return (
         <Container>
             <Paper>
@@ -123,12 +124,14 @@ export const DesktopApp = ({}) => {
                         <Typography style={{maxWidth: '300px'}} align="center">
                             {step === "initial" && <ScreenInitial onDone={() => setStep('code')}/>}
                             {step === "code" && !token && tokenLoading && <CircularProgress/>}
-                            {step === "code" && token && <ScreenCode {...{token, libquietLoaded, libquietProfile}}/>}
+                            {step === "code" && token &&
+                             <ScreenCode {...{token, libquietLoaded, libquietProfile, step}}/>}
                             <DialogSuccess open={step === "success"} onDone={() => setStep("end")}/>
                         </Typography>
                     </Grid>
                 </Grid>
             </Paper>
+            <SoundTransmitter value={token} on={libquietLoaded && step === "code"} profile={libquietProfile}/>
         </Container>
     );
 };

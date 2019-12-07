@@ -9,11 +9,12 @@ export const SoundTransmitter =
          delay = 250,
          profile = "ultrasonic-experimental"
      }) => {
+        const enable = useRef(false);
         const transmit = useRef(null);
         const data = useRef("");
 
         const onTransmitFinish = (immediate = false) => {
-            if(!on) return;
+            if(!enable.current) return;
 
             setTimeout(() => {
                 if(!transmit.current || !data.current)
@@ -25,7 +26,8 @@ export const SoundTransmitter =
 
         useEffect(() => {
             data.current = value;
-        }, [value]);
+            enable.current = on;
+        }, [value, on]);
 
         useEffect(() => {
             if(!on) return;
