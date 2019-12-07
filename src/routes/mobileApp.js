@@ -21,6 +21,69 @@ import RosbankLogo from '../assets/rosbank-logo.png';
 import DevicesIcon from '@material-ui/icons/Devices';
 import {mobileApprove} from '../api/api';
 
+const ScreenInitial = ({onDone}) =>
+    <>
+        <Grid
+            container
+            direction="column"
+            alignItems="center"
+        >
+            <Grid item xs={12}>
+                <Button
+                    variant="contained"
+                    startIcon={<DevicesIcon/>}
+                    onClick={onDone}
+                >
+                    Авторизовать через QR-код
+                </Button>
+            </Grid>
+            <Grid item xs={10} className={classes.userAgreement}>
+                <Typography align="center">
+                    Я прочитал и принимаю условия пользовательского соглашения
+                </Typography>
+            </Grid>
+        </Grid>
+    </>;
+
+const ScreenScan = ({handleToken, libquietLoaded, libquietProfile}) =>
+    <>
+        <Typography align="center" className={classes.scanCode}>
+            <CameraIcon/> Отсканируйте QR-код с устройства
+        </Typography>
+        <QrReader
+            onResult={(data) => handleToken("qr", data)}
+            previewStyle={{
+                width: "100%",
+                height: "100%"
+            }}
+            style={{width: '100%', height: '100%'}}
+        />
+        <SoundReceiver
+            on={libquietLoaded}
+            profile={libquietProfile}
+            onData={(data) => handleToken("sound", data)}
+        />
+    </>;
+
+const DialogSuccess = ({open, onDone}) =>
+    <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+    >
+        <DialogTitle>{"Ваше устройсво подключено!"}</DialogTitle>
+        <DialogContent>
+            <DialogContentText>
+                Теперь вы можете продолжить работу с банком прямо на вашем мобильном устройстве!
+            </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+            <Button onClick={onDone} color="primary">
+                Ок!
+            </Button>
+        </DialogActions>
+    </Dialog>;
+
 export const MobileApp = ({}) => {
     const libquietProfile = useStore(state => state.libquietProfile);
 
@@ -56,65 +119,12 @@ export const MobileApp = ({}) => {
                 alignItems="center"
                 style={{minHeight: '100vh'}}
             >
-                {step === "initial" && <Grid item xs={12}>
-                    <Grid
-                        container
-                        direction="column"
-                        alignItems="center"
-                    >
-                        <Grid item xs={12}>
-                            <Button
-                                variant="contained"
-                                startIcon={<DevicesIcon/>}
-                                onClick={() => setStep("scan")}
-                            >
-                                Авторизовать через QR-код
-                            </Button>
-                        </Grid>
-                        <Grid item xs={10} className={classes.userAgreement}>
-                            <Typography align="center">
-                                Я прочитал и принимаю условия пользовательского соглашения
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>}
-                {step === "scan" && <Grid item xs={12}>
-                    <Typography align="center" className={classes.scanCode}>
-                        <CameraIcon/> Отсканируйте QR-код с устройства
-                    </Typography>
-                    <QrReader
-                        onResult={(data) => handleToken("qr", data)}
-                        previewStyle={{
-                            width: "100%",
-                            height: "100%"
-                        }}
-                        style={{width: '100%', height: '100%'}}
-                    />
-                    <SoundReceiver
-                        on={libquietLoaded}
-                        profile={libquietProfile}
-                        onData={(data) => handleToken("sound", data)}
-                    />
-                </Grid>}
+                <Grid item xs={12}>
+                    {step === "initial" && <ScreenInitial onDone={() => setStep("scan")}/>}
+                    {step === "scan" && <ScreenScan {...{handleToken, libquietLoaded, libquietProfile}}/>}
+                    <DialogSuccess onDone={() => setStep("end")} open={step === "success"}/>
+                </Grid>
             </Grid>
-
-            <Dialog
-                open={step === "success"}
-                TransitionComponent={Transition}
-                keepMounted
-            >
-                <DialogTitle>{"Ваше устройсво подключено!"}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Теперь вы можете продолжить работу с банком прямо на вашем мобильном устройстве!
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setStep("end")} color="primary">
-                        Ок!
-                    </Button>
-                </DialogActions>
-            </Dialog>
         </div>
     );
 };

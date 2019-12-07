@@ -54,7 +54,7 @@ const ScreenCode = ({token, libquietLoaded, libquietProfile}) =>
         <AuthDescription/>
     </>;
 
-const SuccessDialog = ({open, onDone}) =>
+const DialogSuccess = ({open, onDone}) =>
     <Dialog
         open={open}
         TransitionComponent={Transition}
@@ -124,7 +124,7 @@ export const DesktopApp = ({}) => {
                             {step === "initial" && <ScreenInitial onDone={() => setStep('code')}/>}
                             {step === "code" && !token && tokenLoading && <CircularProgress/>}
                             {step === "code" && token && <ScreenCode {...{token, libquietLoaded, libquietProfile}}/>}
-                            <SuccessDialog open={step === "success"} onDone={() => setStep("end")}/>
+                            <DialogSuccess open={step === "success"} onDone={() => setStep("end")}/>
                         </Typography>
                     </Grid>
                 </Grid>
