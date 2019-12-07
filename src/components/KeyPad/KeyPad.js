@@ -13,6 +13,9 @@ export const KeyPad = ({initial = false}) => {
         if(newPin.length === 4){
             setError(true);
             setPin(newPin);
+            if(initial === true){
+                setTimeout(() => window.location = '/keypad', 500);
+            }
         }
         else{
             setError(false);
