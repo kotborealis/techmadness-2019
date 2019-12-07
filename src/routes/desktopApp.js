@@ -12,6 +12,7 @@ import DevicesIcon from '@material-ui/icons/Devices';
 import CameraIcon from '@material-ui/icons/CameraAlt';
 import MicIcon from '@material-ui/icons/Mic';
 import SpeakerPhoneIcon from '@material-ui/icons/SpeakerPhone';
+import Container from '@material-ui/core/Container';
 
 export const DesktopApp = ({}) => {
     const libquietProfile = useStore(state => state.libquietProfile);
@@ -37,52 +38,48 @@ export const DesktopApp = ({}) => {
     }, [showToken]);
 
     return (
-        <Paper>
-            <Grid
-                container
-                direction="column"
-                alignItems="center"
-                justify="center"
-                style={{minHeight: '100vh'}}
-            >
-                <Grid item xs={12}>
-                    <Typography style={{maxWidth: '300px'}} align="center">
+        <Container>
+            <Paper>
+                <Grid
+                    container
+                    direction="column"
+                    alignItems="center"
+                    justify="center"
+                    style={{minHeight: '100vh'}}
+                >
+                    <Grid item xs={12}>
+                        <Typography style={{maxWidth: '300px'}} align="center">
 
-                        {!showToken && <Button
-                            variant="contained"
-                            startIcon={<DevicesIcon/>}
-                            onClick={() => setShowToken(true)}
-                        >
-                            Авторизовать новое мобильное устройство
-                        </Button>}
+                            {!showToken && <Button
+                                variant="contained"
+                                startIcon={<DevicesIcon/>}
+                                onClick={() => setShowToken(true)}
+                            >
+                                Авторизовать новое мобильное устройство
+                            </Button>}
 
-                        {showToken && !token && tokenLoading && <CircularProgress/>}
+                            {showToken && !token && tokenLoading && <CircularProgress/>}
 
-                        {showToken && token && <>
-                            <QrViewer value={token}/>
-                            <SoundTransmitter value={token} on={libquietLoaded} profile={libquietProfile}/>
-                            <SpeakerPhoneIcon fontSize="large"/>
-                            <Typography align="center">
-                                Держите устройство поблизости или отсканируйте QR-код
-                            </Typography>
-                        </>}
+                            {showToken && token && <>
+                                <QrViewer value={token}/>
+                                <SoundTransmitter value={token} on={libquietLoaded} profile={libquietProfile}/>
+                                <SpeakerPhoneIcon fontSize="large"/>
+                                <Typography align="center">
+                                    Держите устройство поблизости или отсканируйте QR-код
+                                </Typography>
+                            </>}
 
-                        <br/>
-                        <br/>
-                        Используйте <nobr>
-                        <MicIcon/> микрофон
-                    </nobr> или <nobr>
-                        <CameraIcon/> камеру
-                    </nobr> Вашего устройства для авторизации в приложении Росбанка
-                    </Typography>
+                            <br/>
+                            <br/>
+                            Используйте <nobr>
+                            <MicIcon/> микрофон
+                        </nobr> или <nobr>
+                            <CameraIcon/> камеру
+                        </nobr> Вашего устройства для авторизации в приложении Росбанка
+                        </Typography>
+                    </Grid>
                 </Grid>
-            </Grid>
-        </Paper>
+            </Paper>
+        </Container>
     );
-
-    return (<Paper>
-        <Typography variant="h5">
-            Генерация
-        </Typography>
-    </Paper>);
 };

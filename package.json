@@ -40,6 +40,7 @@
     "webpack": "^4.0.0",
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.0.0",
-    "zustand": "^2.2.1"
+    "zustand": "^2.2.1",
+    "react-transition-group": "latest"
   }
 }

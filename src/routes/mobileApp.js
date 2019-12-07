@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import {SoundReceiver} from '../components/SoundReceiver/SoundReceiver';
 import {useStore} from '../store/store';
 import Grid from '@material-ui/core/Grid';
 import {QrReader} from '../components/QrReader/QrReader';
 import CameraIcon from '@material-ui/icons/CameraAlt';
+import CloseIcon from '@material-ui/icons/Close';
+
+import classes from './mobileApp.css';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -14,6 +16,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Transition from 'react-transition-group/Transition';
 import Button from '@material-ui/core/Button';
+
+import RosbankLogo from '../assets/rosbank-logo.png';
 
 export const MobileApp = ({}) => {
     const libquietProfile = useStore(state => state.libquietProfile);
@@ -30,15 +34,23 @@ export const MobileApp = ({}) => {
     };
 
     return (
-        <Paper>
+        <div className={classes.root}>
+            <div className={classes.header}>
+                <img className={classes.logo} src={RosbankLogo}/>
+                <span className={classes.close}>
+                    <CloseIcon fontSize="large"/>
+                </span>
+            </div>
             <Grid
                 container
                 direction="column"
                 alignItems="center"
-                justify="center"
                 style={{minHeight: '100vh'}}
             >
                 <Grid item xs={12}>
+                    <Typography align="center" className={classes.scanCode}>
+                        <CameraIcon/> Отсканируйте QR-код с устройства
+                    </Typography>
                     <QrReader
                         onResult={(data) => handleToken("qr", data)}
                         previewStyle={{
@@ -47,7 +59,6 @@ export const MobileApp = ({}) => {
                         }}
                         style={{width: '100%', height: '100%'}}
                     />
-                    <Typography align="center"><CameraIcon/> Отсканируйте QR-код с устройства</Typography>
                     <SoundReceiver
                         on={libquietLoaded}
                         profile={libquietProfile}
@@ -73,6 +84,6 @@ export const MobileApp = ({}) => {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </Paper>
+        </div>
     );
 };
