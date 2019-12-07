@@ -21,6 +21,59 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 
+const AuthDescription = ({}) =>
+    <Typography align="center">
+        Используйте <nobr><MicIcon/> микрофон</nobr> или <nobr><CameraIcon/> камеру</nobr> Вашего устройства для
+        авторизации
+    </Typography>;
+
+const ScreenInitial = ({onDone}) =>
+    <Typography align="center">
+        <Button
+            variant="contained"
+            startIcon={<DevicesIcon/>}
+            onClick={onDone}
+        >
+            Авторизовать новое мобильное устройство
+        </Button>
+        <br/>
+        <br/>
+        <AuthDescription/>
+    </Typography>;
+
+const ScreenCode = ({token, libquietLoaded, libquietProfile}) =>
+    <>
+        <QrViewer value={token}/>
+        <SoundTransmitter value={token} on={libquietLoaded} profile={libquietProfile}/>
+        <SpeakerPhoneIcon fontSize="large"/>
+        <Typography align="center">
+            Держите устройство поблизости или отсканируйте QR-код
+        </Typography>
+        <br/>
+        <br/>
+        <AuthDescription/>
+    </>;
+
+const SuccessDialog = ({open, onDone}) =>
+    <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+    >
+        <DialogTitle>{"Ваше устройсво подключено!"}</DialogTitle>
+        <DialogContent>
+            <DialogContentText>
+                Теперь вы можете продолжить работу с банком прямо на вашем мобильном устройстве!
+            </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+            <Button onClick={onDone} color="primary">
+                Ок!
+            </Button>
+        </DialogActions>
+    </Dialog>;
+
+
 export const DesktopApp = ({}) => {
     const libquietProfile = useStore(state => state.libquietProfile);
 
@@ -68,58 +121,14 @@ export const DesktopApp = ({}) => {
                 >
                     <Grid item xs={12}>
                         <Typography style={{maxWidth: '300px'}} align="center">
-
-                            {step === "initial" && <Button
-                                variant="contained"
-                                startIcon={<DevicesIcon/>}
-                                onClick={() => setStep("code")}
-                            >
-                                Авторизовать новое мобильное устройство
-                            </Button>}
-
+                            {step === "initial" && <ScreenInitial onDone={() => setStep('code')}/>}
                             {step === "code" && !token && tokenLoading && <CircularProgress/>}
-
-                            {step === "code" && token && <>
-                                <QrViewer value={token}/>
-                                <SoundTransmitter value={token} on={libquietLoaded} profile={libquietProfile}/>
-                                <SpeakerPhoneIcon fontSize="large"/>
-                                <Typography align="center">
-                                    Держите устройство поблизости или отсканируйте QR-код
-                                </Typography>
-                            </>}
-
-                            {step === "success" && <>
-                                <Typography>Устройство успешно добавлено</Typography>
-                            </>}
-
-                            <br/>
-                            <br/>
-                            Используйте <nobr>
-                            <MicIcon/> микрофон
-                        </nobr> или <nobr>
-                            <CameraIcon/> камеру
-                        </nobr> Вашего устройства для авторизации в приложении Росбанка
+                            {step === "code" && token && <ScreenCode {...{token, libquietLoaded, libquietProfile}}/>}
+                            <SuccessDialog open={step === "success"} onDone={() => setStep("end")}/>
                         </Typography>
                     </Grid>
                 </Grid>
             </Paper>
-            <Dialog
-                open={step === "success"}
-                TransitionComponent={Transition}
-                keepMounted
-            >
-                <DialogTitle>{"Ваше устройсво подключено!"}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Теперь вы можете продолжить работу с банком прямо на вашем мобильном устройстве!
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setStep("end")} color="primary">
-                        Ок!
-                    </Button>
-                </DialogActions>
-            </Dialog>
         </Container>
     );
 };
