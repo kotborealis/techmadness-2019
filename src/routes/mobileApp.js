@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Typography from '@material-ui/core/Typography';
 import {SoundReceiver} from '../components/SoundReceiver/SoundReceiver';
 import {useStore} from '../store/store';
@@ -89,21 +89,14 @@ export const MobileApp = ({}) => {
 
     const libquietLoaded = useStore(state => !state.libquietLoading);
 
-    const [token, setToken] = useState(null);
     const [step, setStep] = useState("initial");
 
     const handleToken = (source, token) => {
-        console.log("Handle token", token, step);
         if(!token) return;
 
-        setToken(token);
+        void mobileApprove({token});
         setStep("success");
     };
-
-    useEffect(() => {
-        if(!token) return;
-        void mobileApprove({token});
-    }, [token]);
 
     return (
         <div className={classes.root}>
