@@ -10,8 +10,12 @@ export const fetchAuthToken =
     async ({
                time
            }) => {
-        const res = await fetch(apiUrl(`getHashByTime`, {time}));
-        return await res.text();
+        const res = await fetch(apiUrl(`getToken`, {time}), {method: "POST"});
+        const data = await res.json();
+
+        if(!data.success) throw data;
+
+        return data.content;
     };
 
 export const useFetchAuthToken =
