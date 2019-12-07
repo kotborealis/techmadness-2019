@@ -1,18 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import usePreciseTimer from '../hooks/usePreciseTimer';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {QrViewer} from '../components/QrViewer/QrViewer';
 import {SoundTransmitter} from '../components/SoundTransmitter/SoundTransmitter';
 import {useStore} from '../store/store';
-import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import DevicesIcon from '@material-ui/icons/Devices';
 import CameraIcon from '@material-ui/icons/CameraAlt';
 import MicIcon from '@material-ui/icons/Mic';
 import SpeakerPhoneIcon from '@material-ui/icons/SpeakerPhone';
-import Container from '@material-ui/core/Container';
 import {authApprove} from '../api/api';
 import Transition from 'react-transition-group/Transition';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -20,6 +16,25 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
+import FirstStepMock from '../assets/IMG_1149.PNG';
+import SecondStepMock from '../assets/IMG_1150.PNG';
+import ThirdStepMock from '../assets/IMG_1152.PNG';
+import LogoMock from '../assets/photo_2019-12-07_22-27-35.jpg';
+
+const ScreenFirstStep = ({onDone}) =>
+    <div>
+        <img src={FirstStepMock} width={1920} onClick={() => onDone()}/>
+    </div>;
+const ScreenSecondStep = ({onDone}) =>
+    <div>
+        <img src={LogoMock} width={1920} onClick={() => onDone()}/>
+        <img src={SecondStepMock} width={1920} onClick={() => onDone()}/>
+    </div>;
+const ScreenThirdStep = ({onDone}) =>
+    <div>
+        <img src={LogoMock} width={1920} onClick={() => onDone()}/>
+        <img src={ThirdStepMock} width={1920} onClick={() => onDone()}/>
+    </div>;
 
 const AuthDescription = ({}) =>
     <Typography align="center">
@@ -27,25 +42,11 @@ const AuthDescription = ({}) =>
         авторизации
     </Typography>;
 
-const ScreenInitial = ({onDone}) =>
-    <Typography align="center">
-        <Button
-            variant="contained"
-            startIcon={<DevicesIcon/>}
-            onClick={onDone}
-        >
-            Авторизовать новое мобильное устройство
-        </Button>
-        <br/>
-        <br/>
-        <AuthDescription/>
-    </Typography>;
-
 const ScreenCode = ({token, libquietLoaded, libquietProfile, step, tokenLoading = true}) =>
-    <>
+    <Typography align="center">
         <QrViewer value={token}/>
         <Typography>
-            {token.slice(0, 6)}
+            {token ? token.slice(0, 6) : ''}
             {tokenLoading}
         </Typography>
         <SpeakerPhoneIcon fontSize="large"/>
@@ -55,7 +56,7 @@ const ScreenCode = ({token, libquietLoaded, libquietProfile, step, tokenLoading 
         <br/>
         <br/>
         <AuthDescription/>
-    </>;
+    </Typography>;
 
 const DialogSuccess = ({open, onDone}) =>
     <Dialog
@@ -92,52 +93,64 @@ export const DesktopApp = ({}) => {
         userFetch();
     }, []);
 
-    const [step, setStep] = useState("initial");
+    const [step, setStep] = useState(0);
 
     usePreciseTimer(() => {
-        if(step !== "code") return;
+        if(step !== 1) return;
         fetchAuthToken({userId});
     }, 1000 * 4);
 
 
     useEffect(() => {
-        if(step !== "code") return;
+        if(step !== 1) return;
         fetchAuthToken({userId});
     }, [step]);
 
     useEffect(() => {
-        if(step !== "code") return;
+        if(step !== 1) return;
         (async () => {
-            console.log("await auth");
             const data = await authApprove(userId);
             if(data === undefined) return;
-            console.log("await auth done");
-            setStep("success");
+            setStep(2);
         })();
     }, [step, userId]);
 
+    console.log(token, tokenLoading);
+
     return (
-        <Container>
-            <Paper>
-                <Grid
-                    container
-                    direction="column"
-                    alignItems="center"
-                    justify="center"
-                    style={{minHeight: '100vh'}}
-                >
-                    <Grid item xs={12}>
-                        <Typography style={{maxWidth: '300px'}} align="center">
-                            {step === "initial" && <ScreenInitial onDone={() => setStep('code')}/>}
-                            {step === "code" && !token && tokenLoading && <CircularProgress/>}
-                            {step === "code" && token &&
-                             <ScreenCode {...{token, libquietLoaded, libquietProfile, step}}/>}
-                            <DialogSuccess open={step === "success"} onDone={() => setStep("end")}/>
-                        </Typography>
-                    </Grid>
-                </Grid>
-            </Paper>
+        <div>
+            {(step === 0 || step === 1) && <ScreenFirstStep onDone={() => setStep(1)}/>}
+            {step === 1 && <Dialog open={true}>
+                <DialogTitle>Добавить устройство</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        {!token && tokenLoading && <CircularProgress/>}
+                        {token && <ScreenCode {...{token, libquietLoaded, libquietProfile, step}}/>}
+                    </DialogContentText>
+                </DialogContent>
+            </Dialog>}
+            {step === 2 && <ScreenSecondStep onDone={() => setStep(3)}/>}
+            {step === 3 && <ScreenThirdStep onDone={() => setStep(4)}/>}
+            {/*<Paper>*/}
+            {/*<Grid*/}
+            {/*container*/}
+            {/*direction="column"*/}
+            {/*alignItems="center"*/}
+            {/*justify="center"*/}
+            {/*style={{minHeight: '100vh'}}*/}
+            {/*>*/}
+            {/*<Grid item xs={12}>*/}
+            {/*<Typography style={{maxWidth: '300px'}} align="center">*/}
+            {/*{step === "initial" && <ScreenFirstStep onDone={() => setStep('code')}/>}*/}
+            {/*{step === "code" && !token && tokenLoading && <CircularProgress/>}*/}
+            {/*{step === "code" && token &&*/}
+            {/*<ScreenCode {...{token, libquietLoaded, libquietProfile, step}}/>}*/}
+            {/*<DialogSuccess open={step === "success"} onDone={() => setStep("end")}/>*/}
+            {/*</Typography>*/}
+            {/*</Grid>*/}
+            {/*</Grid>*/}
+            {/*</Paper>*/}
             <SoundTransmitter value={token} on={libquietLoaded && step === "code"} profile={libquietProfile}/>
-        </Container>
+        </div>
     );
 };
