@@ -1,7 +1,7 @@
 import create from 'zustand';
 import {devtools} from 'zustand/middleware';
 import produce from 'immer';
-import {fetchAuthToken} from '../api/api';
+import {createUser, fetchAuthToken} from '../api/api';
 import {fetchStore} from './helpers/helpers';
 
 const store = (set) => ({
@@ -10,6 +10,7 @@ const store = (set) => ({
     libquietLoading: true,
     libquietProfile: "ultrasonic-experimental",
 
+    ...fetchStore("user", set, createUser, null),
     ...fetchStore("authToken", set, fetchAuthToken, null),
 });
 

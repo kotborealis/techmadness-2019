@@ -7,9 +7,9 @@ export const apiUrl = (path, query = {}) => `${API_URL}/${[path].flat().join('/'
 
 export const fetchAuthToken =
     async ({
-               time
+               userId
            }) => {
-        const res = await fetch(apiUrl(`getToken`, {time}), {method: "POST"});
+        const res = await fetch(apiUrl(`getToken`, {userId}), {method: "POST"});
         const data = await res.json();
 
         if(!data.success) throw data;
@@ -39,4 +39,17 @@ export const mobileApprove =
         if(!data.success) throw data;
 
         return data.content;
+    };
+
+export const createUser =
+    async ({
+               firstName = "Boris",
+               lastName = "Eltsyn"
+           } = {}) => {
+
+
+        const res = await fetch(apiUrl(`createUser`, {firstName, lastName}), {method: "POST"});
+        const data = await res.json();
+
+        return data;
     };

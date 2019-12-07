@@ -94,8 +94,9 @@ export const MobileApp = ({}) => {
     const handleToken = (source, token) => {
         if(!token) return;
 
-        void mobileApprove({token});
-        setStep("success");
+        mobileApprove({token}).then(() => {
+            setStep("success");
+        }).catch(error => console.log(JSON.stringify(error)));
     };
 
     return (

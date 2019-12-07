@@ -78,27 +78,31 @@ const DialogSuccess = ({open, onDone}) =>
 
 
 export const DesktopApp = ({}) => {
+    const userFetch = useStore(state => state.user.fetch);
+    const userId = useStore(state => state.user.data ? state.user.data.id : null);
+
     const libquietProfile = useStore(state => state.libquietProfile);
 
     const libquietLoaded = useStore(state => !state.libquietLoading);
     const fetchAuthToken = useStore(state => state.authToken.fetch);
     const tokenLoading = useStore(state => state.authToken.loading);
-    const token = useStore(state => state.authToken.data ? state.authToken.data.hash : null);
-    const userId = useStore(state => state.authToken.data ? state.authToken.data.id : null);
+    const token = useStore(state => state.authToken.data);
+
+    useEffect(() => {
+        userFetch();
+    }, []);
 
     const [step, setStep] = useState("initial");
 
-    const calculateHashTime = (ts = Date.now()) => (ts / 1000 / 5) | 0;
-
     usePreciseTimer(() => {
         if(step !== "code") return;
-        fetchAuthToken({time: calculateHashTime()});
-    }, 1000 * 2);
+        fetchAuthToken({userId});
+    }, 1000 * 4);
 
 
     useEffect(() => {
         if(step !== "code") return;
-        fetchAuthToken({time: calculateHashTime()});
+        fetchAuthToken({userId});
     }, [step]);
 
     useEffect(() => {
