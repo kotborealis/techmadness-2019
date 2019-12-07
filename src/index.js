@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container';
 import {DesktopApp} from './routes/desktopApp';
 import {LandingPage} from './routes/ladingPage';
 import {useStore} from './store/store';
+import 'libfec';
 
 const quiet = require('quietjs-bundle');
 
@@ -19,6 +20,8 @@ const App = ({}) => {
             console.log("libquiet ready!");
             setStore(state => void (state.libquietLoading = false));
         });
+
+        window.setQuietProfile = (profile) => setStore(state => void (state.libquietProfile = profile));
     }, []);
 
     return (

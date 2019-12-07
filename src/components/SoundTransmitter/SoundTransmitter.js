@@ -6,7 +6,7 @@ export const SoundTransmitter =
     ({
          on = false,
          value = "",
-         delay = 100,
+         delay = 250,
          profile = "ultrasonic-experimental"
      }) => {
         const transmit = useRef(null);

@@ -8,6 +8,7 @@ const store = (set) => ({
     set: fn => set(produce(fn), "set"),
 
     libquietLoading: true,
+    libquietProfile: "ultrasonic-experimental",
 
     ...fetchStore("authToken", set, fetchAuthToken, null),
 });

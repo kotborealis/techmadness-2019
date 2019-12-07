@@ -16,10 +16,13 @@ export const SoundReceiver =
 
             if(!on) return;
 
+            console.log("SETUP RECIEVER");
+
             quiet.receiver({
                 profile,
-                onReceive: (data) =>
-                    handler.current(quiet.ab2str(data))
+                onReceive: (data) => handler.current(quiet.ab2str(data)),
+                onCreateFail: (...args) => console.log("failed to create receiver", ...args),
+                onReceiveFail: (...args) => console.log("receiver error", ...args),
             });
         }, [onData, on, profile]);
 

@@ -14,6 +14,8 @@ import MicIcon from '@material-ui/icons/Mic';
 import SpeakerPhoneIcon from '@material-ui/icons/SpeakerPhone';
 
 export const DesktopApp = ({}) => {
+    const libquietProfile = useStore(state => state.libquietProfile);
+
     const libquietLoaded = useStore(state => !state.libquietLoading);
     const fetchAuthToken = useStore(state => state.authToken.fetch);
     const tokenLoading = useStore(state => state.authToken.loading);
@@ -58,7 +60,7 @@ export const DesktopApp = ({}) => {
 
                         {showToken && token && <>
                             <QrViewer value={token}/>
-                            <SoundTransmitter value={token} on={libquietLoaded}/>
+                            <SoundTransmitter value={token} on={libquietLoaded} profile={libquietProfile}/>
                             <SpeakerPhoneIcon fontSize="large"/>
                             <Typography align="center">
                                 Держите устройство поблизости или отсканируйте QR-код

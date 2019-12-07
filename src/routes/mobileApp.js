@@ -1,18 +1,19 @@
 import React, {useState} from 'react';
-import {QrReader} from '../components/QrReader/QrReader';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import {SoundReceiver} from '../components/SoundReceiver/SoundReceiver';
 import {useStore} from '../store/store';
 
 export const MobileApp = ({}) => {
+    const libquietProfile = useStore(state => state.libquietProfile);
+
     const libquietLoaded = useStore(state => !state.libquietLoading);
 
     const [token, setToken] = useState(null);
 
     const handleToken = (source, token) => {
         if(!token) return;
-        alert(JSON.stringify({source, token}));
+        console.log(source, token);
         setToken(token);
     };
 
@@ -21,16 +22,17 @@ export const MobileApp = ({}) => {
             Авторизация
         </Typography>
 
-        <QrReader
-            onResult={(data) => handleToken("qr", data)}
-            previewStyle={{
-                width: 320,
-                height: 320
-            }}
-        />
+        {/*<QrReader*/}
+        {/*onResult={(data) => handleToken("qr", data)}*/}
+        {/*previewStyle={{*/}
+        {/*width: 320,*/}
+        {/*height: 320*/}
+        {/*}}*/}
+        {/*/>*/}
 
         <SoundReceiver
             on={libquietLoaded}
+            profile={libquietProfile}
             onData={(data) => handleToken("sound", data)}
         />
 
