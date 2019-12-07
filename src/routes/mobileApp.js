@@ -3,18 +3,10 @@ import {QrReader} from '../components/QrReader/QrReader';
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography';
 import {SoundReceiver} from '../components/SoundReceiver/SoundReceiver';
-
-const quiet = require('quietjs-bundle');
+import {useStore} from '../store/store';
 
 export const MobileApp = ({}) => {
-    const [soundActive, setSoundActive] = useState(false);
-
-    useEffect(() => {
-        quiet.addReadyCallback(() => {
-            console.log("QUIET JS LOADED");
-            setSoundActive(true);
-        });
-    }, []);
+    const libquietLoaded = useStore(state => !state.libquietLoading);
 
     const [token, setToken] = useState(null);
 
@@ -32,7 +24,7 @@ export const MobileApp = ({}) => {
         />
 
         <SoundReceiver
-            on={soundActive}
+            on={libquietLoaded}
             onData={(...data) => console.log(data)}
         />
 
