@@ -18,6 +18,7 @@ import Transition from 'react-transition-group/Transition';
 import Button from '@material-ui/core/Button';
 
 import RosbankLogo from '../assets/rosbank-logo.png';
+import DevicesIcon from '@material-ui/icons/Devices';
 
 export const MobileApp = ({}) => {
     const libquietProfile = useStore(state => state.libquietProfile);
@@ -25,12 +26,13 @@ export const MobileApp = ({}) => {
     const libquietLoaded = useStore(state => !state.libquietLoading);
 
     const [token, setToken] = useState(null);
-    const [showDialog, setShowDialog] = useState(false);
+    const [step, setStep] = useState("initial");
 
     const handleToken = (source, token) => {
-        if(!token || showDialog) return;
+        if(!token || step !== "scan") return;
+
         setToken(token);
-        setShowDialog(true);
+        setStep("success");
     };
 
     return (
@@ -47,7 +49,29 @@ export const MobileApp = ({}) => {
                 alignItems="center"
                 style={{minHeight: '100vh'}}
             >
-                <Grid item xs={12}>
+                {step === "initial" && <Grid item xs={12}>
+                    <Grid
+                        container
+                        direction="column"
+                        alignItems="center"
+                    >
+                        <Grid item xs={12}>
+                            <Button
+                                variant="contained"
+                                startIcon={<DevicesIcon/>}
+                                onClick={() => setStep("scan")}
+                            >
+                                Авторизовать через QR-код
+                            </Button>
+                        </Grid>
+                        <Grid item xs={10} className={classes.userAgreement}>
+                            <Typography align="center">
+                                Я прочитал и принимаю условия пользовательского соглашения
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </Grid>}
+                {step === "scan" && <Grid item xs={12}>
                     <Typography align="center" className={classes.scanCode}>
                         <CameraIcon/> Отсканируйте QR-код с устройства
                     </Typography>
@@ -64,11 +88,11 @@ export const MobileApp = ({}) => {
                         profile={libquietProfile}
                         onData={(data) => handleToken("sound", data)}
                     />
-                </Grid>
+                </Grid>}
             </Grid>
 
             <Dialog
-                open={showDialog}
+                open={step === "success"}
                 TransitionComponent={Transition}
                 keepMounted
             >
@@ -79,7 +103,7 @@ export const MobileApp = ({}) => {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setShowDialog(false)} color="primary">
+                    <Button onClick={() => setStep("end")} color="primary">
                         Ок!
                     </Button>
                 </DialogActions>
