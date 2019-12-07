@@ -31,6 +31,12 @@ module.exports = (env = {prod: false}) => {
         resolve: {
             alias: {
                 "components": path.resolve(__dirname, '../src/components'),
+                'fs': 'browserfs/dist/shims/fs.js',
+                'buffer': 'browserfs/dist/shims/buffer.js',
+                'path': 'browserfs/dist/shims/path.js',
+                'processGlobal': 'browserfs/dist/shims/process.js',
+                'bufferGlobal': 'browserfs/dist/shims/bufferGlobal.js',
+                'bfsGlobal': require.resolve('browserfs')
             }
         },
 
@@ -143,7 +149,14 @@ module.exports = (env = {prod: false}) => {
             new webpack.DefinePlugin({
                 'process.env.PUBLIC_PATH': JSON.stringify(PUBLIC_PATH),
             }),
+
+            new webpack.ProvidePlugin({ BrowserFS: 'bfsGlobal', process: 'processGlobal', Buffer: 'bufferGlobal' })
         ]),
+
+        node: {
+            process: false,
+            Buffer: false
+        },
 
         devServer: {
             host: `0.0.0.0`,
