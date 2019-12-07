@@ -1,12 +1,12 @@
 import React from 'react';
 import {KeyPad} from '../components/KeyPad/KeyPad';
 
-export const KeypadPage = ({}) =>
+export const KeypadPage = (props) =>
     <div style={{
         padding: '20px',
         background: `linear-gradient(180deg, #DD2626 0%, #3D2C36 100%)`,
         minHeight: '100vh',
         display: 'flex',
     }}>
-        <KeyPad/>
+        <KeyPad {...props}/>
     </div>;

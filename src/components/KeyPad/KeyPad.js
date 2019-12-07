@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 
-export const KeyPad = () => {
+export const KeyPad = ({initial = false}) => {
     const [error, setError] = useState(false);
     const [pin, setPin] = useState([]);
 
@@ -39,7 +39,7 @@ export const KeyPad = () => {
                     for(let i = 0; i < pin.length; i++)
                         line.push(
                             <Grid item xs={3} alignItems="center" justify="center" style={{textAlign: "center"}}>
-                                <IconButton aria-label="pin" style={{color: error ? '#ff0000' : '#ffffff'}}>
+                                <IconButton aria-label="pin" style={{color: !initial && error ? '#ff0000' : '#ffffff'}}>
                                     {pin[i]}
                                 </IconButton>
                             </Grid>
@@ -47,7 +47,7 @@ export const KeyPad = () => {
 
                     if(line.length === 0) line.push(
                         <Grid item xs={3} alignItems="center" justify="center" style={{textAlign: "center"}}>
-                            <IconButton aria-label="pin" style={{color: error ? '#482b35' : '#ffffff'}}>
+                            <IconButton aria-label="pin" style={{color: !initial && error ? '#482b35' : '#ffffff'}}>
                                 &nbsp;
                             </IconButton>
                         </Grid>
@@ -94,15 +94,16 @@ export const KeyPad = () => {
                   justify="center"
                   alignItems="center"
             >
-                <Grid item xs={12}>
+                {!initial && <Grid item xs={12}>
                     <Button
                         variant="outlined"
                         style={{
                             color: 'white',
                             borderColor: 'white'
                         }}
+                        onClick={() => void (window.location = '/mobile')}
                     >Забыли пинкод? :(</Button>
-                </Grid>
+                </Grid>}
             </Grid>
         </Grid>
     );

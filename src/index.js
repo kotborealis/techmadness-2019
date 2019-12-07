@@ -36,6 +36,9 @@ const App = ({}) => {
                 <Route path="/desktop">
                     <DesktopApp/>
                 </Route>
+                <Route path="/keypadInitial">
+                    <KeypadPage initial={true}/>
+                </Route>
                 <Route path="/keypad">
                     <KeypadPage/>
                 </Route>

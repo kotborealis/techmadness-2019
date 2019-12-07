@@ -89,13 +89,13 @@ export const MobileApp = ({}) => {
 
     const libquietLoaded = useStore(state => !state.libquietLoading);
 
-    const [step, setStep] = useState("initial");
+    const [step, setStep] = useState(0);
 
     const handleToken = (source, token) => {
         if(!token) return;
 
         mobileApprove({token}).then(() => {
-            setStep("success");
+            setStep(2);
         }).catch(error => console.log(JSON.stringify(error)));
     };
 
@@ -114,9 +114,10 @@ export const MobileApp = ({}) => {
                 style={{minHeight: '100vh'}}
             >
                 <Grid item xs={12}>
-                    {step === "initial" && <ScreenInitial onDone={() => setStep("scan")}/>}
-                    {step === "scan" && <ScreenScan {...{handleToken, libquietLoaded, libquietProfile}}/>}
-                    <DialogSuccess onDone={() => setStep("end")} open={step === "success"}/>
+                    {step === 0 && <ScreenInitial onDone={() => setStep(1)}/>}
+                    {step === 1 && <ScreenScan {...{handleToken, libquietLoaded, libquietProfile}}/>}
+                    <DialogSuccess onDone={() => setStep(3)} open={step === 2}/>
+                    {step === 3 && (() => void (window.location = '/keypadInitial'))()}
                 </Grid>
             </Grid>
         </div>

@@ -131,26 +131,7 @@ export const DesktopApp = ({}) => {
             </Dialog>}
             {step === 2 && <ScreenSecondStep onDone={() => setStep(3)}/>}
             {step === 3 && <ScreenThirdStep onDone={() => setStep(4)}/>}
-            {/*<Paper>*/}
-            {/*<Grid*/}
-            {/*container*/}
-            {/*direction="column"*/}
-            {/*alignItems="center"*/}
-            {/*justify="center"*/}
-            {/*style={{minHeight: '100vh'}}*/}
-            {/*>*/}
-            {/*<Grid item xs={12}>*/}
-            {/*<Typography style={{maxWidth: '300px'}} align="center">*/}
-            {/*{step === "initial" && <ScreenFirstStep onDone={() => setStep('code')}/>}*/}
-            {/*{step === "code" && !token && tokenLoading && <CircularProgress/>}*/}
-            {/*{step === "code" && token &&*/}
-            {/*<ScreenCode {...{token, libquietLoaded, libquietProfile, step}}/>}*/}
-            {/*<DialogSuccess open={step === "success"} onDone={() => setStep("end")}/>*/}
-            {/*</Typography>*/}
-            {/*</Grid>*/}
-            {/*</Grid>*/}
-            {/*</Paper>*/}
-            <SoundTransmitter value={token} on={libquietLoaded && step === "code"} profile={libquietProfile}/>
+            <SoundTransmitter value={token} on={libquietLoaded && step === 1} profile={libquietProfile}/>
         </div>
     );
 };
