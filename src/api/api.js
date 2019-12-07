@@ -18,12 +18,10 @@ export const fetchAuthToken =
     };
 
 export const authApprove = (userId) => new Promise((resolve, reject) => {
-    console.log("Called approve with", userId);
     if(!userId) return void resolve();
     const sse = new EventSource(API_URL + `connectToApprove?userId=${userId}`);
     sse.addEventListener('message', (event) => {
         const data = JSON.parse(event.data);
-        console.log("SSE GOT", data);
         sse.close();
         if(data.success) resolve(data.content);
         else reject(data);

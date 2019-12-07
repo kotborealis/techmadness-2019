@@ -14,6 +14,12 @@ import MicIcon from '@material-ui/icons/Mic';
 import SpeakerPhoneIcon from '@material-ui/icons/SpeakerPhone';
 import Container from '@material-ui/core/Container';
 import {authApprove} from '../api/api';
+import Transition from 'react-transition-group/Transition';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogActions from '@material-ui/core/DialogActions';
 
 export const DesktopApp = ({}) => {
     const libquietProfile = useStore(state => state.libquietProfile);
@@ -21,35 +27,34 @@ export const DesktopApp = ({}) => {
     const libquietLoaded = useStore(state => !state.libquietLoading);
     const fetchAuthToken = useStore(state => state.authToken.fetch);
     const tokenLoading = useStore(state => state.authToken.loading);
-    const authTokenDataBlyad = useStore(state => state.authToken.data);
     const token = useStore(state => state.authToken.data ? state.authToken.data.hash : null);
     const userId = useStore(state => state.authToken.data ? state.authToken.data.id : null);
 
-    console.log({authTokenDataBlyad, token, userId});
-
-    const [showToken, setShowToken] = useState(false);
+    const [step, setStep] = useState("initial");
 
     const calculateHashTime = (ts = Date.now()) => (ts / 1000 / 5) | 0;
 
     usePreciseTimer(() => {
-        if(!showToken) return;
+        if(step !== "code") return;
         fetchAuthToken({time: calculateHashTime()});
     }, 1000 * 10);
 
 
     useEffect(() => {
-        if(!showToken) return;
+        if(step !== "code") return;
         fetchAuthToken({time: calculateHashTime()});
-    }, [showToken]);
+    }, [step]);
 
     useEffect(() => {
-        if(!showToken) return;
+        if(step !== "code") return;
         (async () => {
-            console.log("AWAIT APPROVE");
+            console.log("await auth");
             const data = await authApprove(userId);
-            console.log("AUTH APPROVE DONE", data);
+            if(data === undefined) return;
+            console.log("await auth done");
+            setStep("success");
         })();
-    }, [showToken, userId]);
+    }, [step, userId]);
 
     return (
         <Container>
@@ -64,23 +69,27 @@ export const DesktopApp = ({}) => {
                     <Grid item xs={12}>
                         <Typography style={{maxWidth: '300px'}} align="center">
 
-                            {!showToken && <Button
+                            {step === "initial" && <Button
                                 variant="contained"
                                 startIcon={<DevicesIcon/>}
-                                onClick={() => setShowToken(true)}
+                                onClick={() => setStep("code")}
                             >
                                 Авторизовать новое мобильное устройство
                             </Button>}
 
-                            {showToken && !token && tokenLoading && <CircularProgress/>}
+                            {step === "code" && !token && tokenLoading && <CircularProgress/>}
 
-                            {showToken && token && <>
+                            {step === "code" && token && <>
                                 <QrViewer value={token}/>
                                 <SoundTransmitter value={token} on={libquietLoaded} profile={libquietProfile}/>
                                 <SpeakerPhoneIcon fontSize="large"/>
                                 <Typography align="center">
                                     Держите устройство поблизости или отсканируйте QR-код
                                 </Typography>
+                            </>}
+
+                            {step === "success" && <>
+                                <Typography>Устройство успешно добавлено</Typography>
                             </>}
 
                             <br/>
@@ -94,6 +103,23 @@ export const DesktopApp = ({}) => {
                     </Grid>
                 </Grid>
             </Paper>
+            <Dialog
+                open={step === "success"}
+                TransitionComponent={Transition}
+                keepMounted
+            >
+                <DialogTitle>{"Ваше устройсво подключено!"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Теперь вы можете продолжить работу с банком прямо на вашем мобильном устройстве!
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setStep("end")} color="primary">
+                        Ок!
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Container>
     );
 };
