@@ -41,9 +41,13 @@ const ScreenInitial = ({onDone}) =>
         <AuthDescription/>
     </Typography>;
 
-const ScreenCode = ({token, libquietLoaded, libquietProfile, step}) =>
+const ScreenCode = ({token, libquietLoaded, libquietProfile, step, tokenLoading = true}) =>
     <>
         <QrViewer value={token}/>
+        <Typography>
+            {token.slice(0, 6)}
+            {tokenLoading}
+        </Typography>
         <SpeakerPhoneIcon fontSize="large"/>
         <Typography align="center">
             Держите устройство поблизости или отсканируйте QR-код
@@ -89,7 +93,7 @@ export const DesktopApp = ({}) => {
     usePreciseTimer(() => {
         if(step !== "code") return;
         fetchAuthToken({time: calculateHashTime()});
-    }, 1000 * 10);
+    }, 1000 * 2);
 
 
     useEffect(() => {
