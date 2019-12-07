@@ -1,33 +1,24 @@
-import { useEffect, useRef, useState } from 'react';
+import {useEffect, useRef} from 'react';
 
-const usePreciseTimer = (handler, periodInMilliseconds, activityFlag) => {
-    const [timeDelay, setTimeDelay] = useState(1);
+const usePreciseTimer = (callback, delay) => {
     const savedCallback = useRef();
-    const initialTime = useRef();
 
+    // Remember the latest callback.
     useEffect(() => {
-        savedCallback.current = handler;
-        handler();
-    }, [handler]);
+        savedCallback.current = callback;
+    }, [callback]);
 
+    // Set up the interval.
     useEffect(() => {
-        if (activityFlag) {
-            initialTime.current = new Date().getTime();
-            const id = setInterval(() => {
-                const currentTime = new Date().getTime();
-                const delay = currentTime - initialTime.current;
-                initialTime.current = currentTime;
-                setTimeDelay(delay / 1000);
-                savedCallback.current(timeDelay);
-            }, periodInMilliseconds);
-
-            return () => {
-                clearInterval(id);
-            };
+        function tick() {
+            savedCallback.current();
         }
-    }, [periodInMilliseconds, activityFlag, timeDelay]);
 
-
+        if(delay !== null){
+            let id = setInterval(tick, delay);
+            return () => clearInterval(id);
+        }
+    }, [delay]);
 };
 
 export default usePreciseTimer;
