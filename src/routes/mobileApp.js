@@ -12,6 +12,7 @@ export const MobileApp = ({}) => {
 
     const handleToken = (source, token) => {
         if(!token) return;
+        alert(JSON.stringify({source, token}));
         setToken(token);
     };
 
