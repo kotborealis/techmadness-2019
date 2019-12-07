@@ -7,6 +7,7 @@ import {DesktopApp} from './routes/desktopApp';
 import {LandingPage} from './routes/ladingPage';
 import {useStore} from './store/store';
 import 'libfec';
+import {KeypadPage} from './routes/keypad';
 
 const quiet = require('quietjs-bundle');
 
@@ -34,6 +35,9 @@ const App = ({}) => {
                 </Route>
                 <Route path="/desktop">
                     <DesktopApp/>
+                </Route>
+                <Route path="/keypad">
+                    <KeypadPage/>
                 </Route>
             </Switch>
         </BrowserRouter>
