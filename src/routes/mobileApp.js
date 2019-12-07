@@ -92,9 +92,9 @@ export const MobileApp = ({}) => {
     const [token, setToken] = useState(null);
     const [step, setStep] = useState("initial");
 
-    const handleToken = (source, data) => {
-        if(data === null) return;
-        if(token !== null) return;
+    const handleToken = (source, token) => {
+        console.log("Handle token", token, step);
+        if(!token) return;
 
         setToken(token);
         setStep("success");
