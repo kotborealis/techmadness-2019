@@ -99,7 +99,7 @@ export const MobileApp = ({}) => {
         if(!token) return;
 
         mobileApprove({token}).then(({code}) => {
-            setApproveCode(code);
+            if(approveCode === null) setApproveCode(code);
             setStep(2);
         }).catch(error => console.log(JSON.stringify(error)));
     };

@@ -133,7 +133,7 @@ export const DesktopApp = ({}) => {
         (async () => {
             const data = await authApprove(userId);
             if(data === undefined) return;
-            setStore(state => void (state.approveCode = data.code));
+            setStore(state => void (state.approveCode === null ? state.approveCode = data.code : undefined));
             advanceStep();
         })();
     }, [step, userId]);
