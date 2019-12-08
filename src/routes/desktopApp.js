@@ -37,7 +37,11 @@ const ScreenSecondStep = ({approveCode, onDone}) => <RosbankDesktopMockup
     title={"Для завершения регистрации подпишите сертификат"}
 >
     <Typography>
-        Проверьте, что код на устройстве совпадает с отображаемым: <b>{approveCode}</b>
+        <br/>
+        Проверьте, что код на устройстве совпадает с отображаемым:
+        <br/>
+        <br/>
+        <Typography variant="h5">{approveCode}</Typography>
     </Typography>
     <div style={{margin: '20px 10px'}}>
         <Button variant="outlined" color="primary" style={{margin: '0 10px'}}>

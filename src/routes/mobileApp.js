@@ -74,7 +74,10 @@ const DialogSuccess = ({open, approveCode, onDone}) =>
         <DialogTitle>{"Остался один шаг"}</DialogTitle>
         <DialogContent>
             <DialogContentText>
-                Проверьте, что код на устройстве совпадает с отображаемым: <b>{approveCode}</b>
+                Проверьте, что код на устройстве совпадает с отображаемым:
+                <br/>
+                <br/>
+                <Typography variant="h4">{approveCode}</Typography>
             </DialogContentText>
         </DialogContent>
         <DialogActions>
