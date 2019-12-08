@@ -12,12 +12,16 @@ import SpeakerPhoneIcon from '@material-ui/icons/SpeakerPhone';
 import {authApprove} from '../api/api';
 import {RosbankDesktopMockup} from '../components/RosbankDesktopMockup';
 import {DevicesList} from '../components/DevicesList/DevicesList';
+import ScreenPicture1 from '../assets/1.jpg';
+import ScreenPicture2 from '../assets/2.jpg';
+import ScreenPicture3 from '../assets/3.jpg';
 
 const ScreenFirstStep = ({onDone}) => <RosbankDesktopMockup
     onClick={onDone}
     step={1}
     totalSteps={4}
     title={"Ознакомьтесь с условиями использования"}
+    picture={<img src={ScreenPicture1} style={{width: '100%'}}/>}
 >
     <Button variant="outlined" color="primary" size="large" style={{margin: '50px 10px', fontSize: '1.5rem'}}>
         Я согласен с условиями
@@ -34,8 +38,8 @@ const ScreenCodeStep = ({token, tokenLoading, libquietLoaded, libquietProfile, s
             <>
                 {!token && tokenLoading && <CircularProgress/>}
                 {token && <>
-                    <QrViewer value={token} style={{width: '397px', height: 'auto'}}/>
-                    <Typography variant="h2" style={{textAlign: 'center', verticalAlign: 'center'}}>
+                    <QrViewer value={token} style={{width: '360px', height: 'auto'}}/>
+                    <Typography variant="h2" style={{textAlign: 'center', verticalAlign: 'center', width: '350px'}}>
                         <SpeakerPhoneIcon style={{fontSize: "4.5rem"}}/>
                         <span style={{verticalAlign: 'middle'}}>
                             {token ? token.slice(0, 6) : ''}
@@ -54,6 +58,7 @@ const ScreenSecondStep = ({approveCode, onDone}) => <RosbankDesktopMockup
     step={3}
     totalSteps={4}
     title={"Для завершения регистрации подпишите сертификат"}
+    picture={<img src={ScreenPicture3} style={{width: '100%'}}/>}
 >
     <Typography variant="h3">
         <br/>
@@ -78,6 +83,7 @@ const ScreenThirdStep = ({onDone}) => <RosbankDesktopMockup
     step={4}
     totalSteps={4}
     title={"Вы успешно подключились! Пользуйтесь банком вне офиса."}
+    picture={<img src={ScreenPicture2} style={{width: '100%'}}/>}
 >
     <Typography variant="h3">Подключённые устройства:</Typography>
     <br/>
