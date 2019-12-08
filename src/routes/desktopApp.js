@@ -21,15 +21,28 @@ const ScreenFirstStep = ({onDone}) => <RosbankDesktopMockup
 >
 </RosbankDesktopMockup>;
 
-const ScreenCodeStep = ({token, tokenLoading, libquietLoaded, libquietProfile, step, onDone}) => <RosbankDesktopMockup
-    onClick={onDone}
-    step={2}
-    totalSteps={4}
-    title={"Добавление устройства"}
->
-    {!token && tokenLoading && <CircularProgress/>}
-    {token && <ScreenCode {...{token, libquietLoaded, libquietProfile, step}}/>}
-</RosbankDesktopMockup>;
+const ScreenCodeStep = ({token, tokenLoading, libquietLoaded, libquietProfile, step, onDone}) =>
+    <RosbankDesktopMockup
+        onClick={onDone}
+        step={2}
+        totalSteps={4}
+        title={"Добавление устройства"}
+        picture={
+            <>
+                {!token && tokenLoading && <CircularProgress/>}
+                {token && <>
+                    <QrViewer value={token} style={{width: '360px', height: 'auto'}}/>
+                    <Typography variant="h2">
+                        <SpeakerPhoneIcon style={{fontSize: "4.5rem"}}/>
+                        {token ? token.slice(0, 6) : ''}
+                    </Typography>
+                </>}
+            </>
+        }
+    >
+        {!token && tokenLoading && <CircularProgress/>}
+        {token && <ScreenCode {...{token, libquietLoaded, libquietProfile, step}}/>}
+    </RosbankDesktopMockup>;
 
 const ScreenSecondStep = ({approveCode, onDone}) => <RosbankDesktopMockup
     onClick={onDone}
@@ -37,13 +50,13 @@ const ScreenSecondStep = ({approveCode, onDone}) => <RosbankDesktopMockup
     totalSteps={4}
     title={"Для завершения регистрации подпишите сертификат"}
 >
-    <Typography>
+    <Typography variant="h3">
         <br/>
         Проверьте, что код на устройстве совпадает с отображаемым:
         <br/>
         <br/>
-        <Typography variant="h5">{approveCode}</Typography>
     </Typography>
+    <Typography variant="h2">{approveCode}</Typography>
     <div style={{margin: '20px 10px'}}>
         <Button variant="outlined" color="primary" style={{margin: '0 10px'}}>
             Подписать сертификат
@@ -61,26 +74,20 @@ const ScreenThirdStep = ({onDone}) => <RosbankDesktopMockup
     totalSteps={4}
     title={"Вы успешно подключились! Пользуйтесь банком вне офиса."}
 >
-    <Typography variant="h5">Подключённые устройства:</Typography>
+    <Typography variant="h3">Подключённые устройства:</Typography>
     <br/>
     <DevicesList/>
 </RosbankDesktopMockup>;
 
 const AuthDescription = ({}) =>
-    <Typography align="center">
+    <Typography variant="h3">
         Используйте <nobr><MicIcon/> микрофон</nobr> или <nobr><CameraIcon/> камеру</nobr> Вашего устройства для
         авторизации
     </Typography>;
 
-const ScreenCode = ({token, libquietLoaded, libquietProfile, step, tokenLoading = true}) =>
-    <Typography align="center">
-        <QrViewer value={token}/>
-        <Typography>
-            {token ? token.slice(0, 6) : ''}
-            {tokenLoading}
-        </Typography>
-        <SpeakerPhoneIcon fontSize="large"/>
-        <Typography align="center">
+const ScreenCode = () =>
+    <Typography variant="h3">
+        <Typography variant="h3">
             Держите устройство поблизости или отсканируйте QR-код
         </Typography>
         <br/>

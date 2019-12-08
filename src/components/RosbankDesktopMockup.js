@@ -34,10 +34,10 @@ export const RosbankDesktopMockup = ({title, step, totalSteps, children, picture
             <Grid item style={{background: '#f1f1f1', margin: '10px 40px', padding: '50px'}} xs={12}>
                 <Grid container direction="row">
                     <Grid item xs={8}>
-                        <Grid container direction="columnt">
+                        <Grid container direction="column">
                             <Grid item xs={12}>
                                 <Typography style={{color: "#727272"}}>Шаг {step} из {totalSteps}</Typography>
-                                <Typography variant="h5">{title}</Typography>
+                                <Typography variant="h2">{title}</Typography>
                             </Grid>
                             <Grid item xs={12}>
                                 {children}
