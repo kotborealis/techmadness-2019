@@ -10,6 +10,8 @@ const store = (set) => ({
     libquietLoading: true,
     libquietProfile: "ultrasonic-experimental",
 
+    approveCode: null,
+
     ...fetchStore("user", set, createUser, null),
     ...fetchStore("authToken", set, fetchAuthToken, null),
 });

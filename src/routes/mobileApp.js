@@ -65,16 +65,16 @@ const ScreenScan = ({handleToken, libquietLoaded, libquietProfile}) =>
         />
     </>;
 
-const DialogSuccess = ({open, onDone}) =>
+const DialogSuccess = ({open, approveCode, onDone}) =>
     <Dialog
         open={open}
         TransitionComponent={Transition}
         keepMounted
     >
-        <DialogTitle>{"Ваше устройсво подключено!"}</DialogTitle>
+        <DialogTitle>{"Остался один шаг"}</DialogTitle>
         <DialogContent>
             <DialogContentText>
-                Теперь вы можете продолжить работу с банком прямо на вашем мобильном устройстве!
+                Проверьте, что код на устройстве совпадает с отображаемым: <b>{approveCode}</b>
             </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -90,11 +90,13 @@ export const MobileApp = ({}) => {
     const libquietLoaded = useStore(state => !state.libquietLoading);
 
     const [step, setStep] = useState(0);
+    const [approveCode, setApproveCode] = useState(null);
 
     const handleToken = (source, token) => {
         if(!token) return;
 
-        mobileApprove({token}).then(() => {
+        mobileApprove({token}).then(({code}) => {
+            setApproveCode(code);
             setStep(2);
         }).catch(error => console.log(JSON.stringify(error)));
     };
@@ -116,7 +118,7 @@ export const MobileApp = ({}) => {
                 <Grid item xs={12}>
                     {step === 0 && <ScreenInitial onDone={() => setStep(1)}/>}
                     {step === 1 && <ScreenScan {...{handleToken, libquietLoaded, libquietProfile}}/>}
-                    <DialogSuccess onDone={() => setStep(3)} open={step === 2}/>
+                    <DialogSuccess onDone={() => setStep(3)} open={step === 2} approveCode={approveCode}/>
                     {step === 3 && (() => void (window.location = '/keypadInitial'))()}
                 </Grid>
             </Grid>

@@ -10,12 +10,6 @@ import CameraIcon from '@material-ui/icons/CameraAlt';
 import MicIcon from '@material-ui/icons/Mic';
 import SpeakerPhoneIcon from '@material-ui/icons/SpeakerPhone';
 import {authApprove} from '../api/api';
-import Transition from 'react-transition-group/Transition';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogActions from '@material-ui/core/DialogActions';
 import {RosbankDesktopMockup} from '../components/RosbankDesktopMockup';
 
 const ScreenFirstStep = ({onDone}) => <RosbankDesktopMockup
@@ -36,12 +30,23 @@ const ScreenCodeStep = ({token, tokenLoading, libquietLoaded, libquietProfile, s
     {token && <ScreenCode {...{token, libquietLoaded, libquietProfile, step}}/>}
 </RosbankDesktopMockup>;
 
-const ScreenSecondStep = ({onDone}) => <RosbankDesktopMockup
+const ScreenSecondStep = ({approveCode, onDone}) => <RosbankDesktopMockup
     onClick={onDone}
     step={3}
     totalSteps={4}
     title={"Для завершения регистрации подпишите сертификат"}
 >
+    <Typography>
+        Проверьте, что код на устройстве совпадает с отображаемым: <b>{approveCode}</b>
+    </Typography>
+    <div style={{margin: '20px 10px'}}>
+        <Button variant="outlined" color="primary" style={{margin: '0 10px'}}>
+            Подписать сертификат
+        </Button>
+        <Button variant="outlined" color="secondary" style={{margin: '0 10px'}}>
+            Отменить
+        </Button>
+    </div>
 </RosbankDesktopMockup>;
 
 
@@ -75,27 +80,10 @@ const ScreenCode = ({token, libquietLoaded, libquietProfile, step, tokenLoading 
         <AuthDescription/>
     </Typography>;
 
-const DialogSuccess = ({open, onDone}) =>
-    <Dialog
-        open={open}
-        TransitionComponent={Transition}
-        keepMounted
-    >
-        <DialogTitle>{"Ваше устройсво подключено!"}</DialogTitle>
-        <DialogContent>
-            <DialogContentText>
-                Теперь вы можете продолжить работу с банком прямо на вашем мобильном устройстве!
-            </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-            <Button onClick={onDone} color="primary">
-                Ок!
-            </Button>
-        </DialogActions>
-    </Dialog>;
-
 
 export const DesktopApp = ({}) => {
+    const setStore = useStore(state => state.set);
+
     const userFetch = useStore(state => state.user.fetch);
     const userId = useStore(state => state.user.data ? state.user.data.id : null);
 
@@ -105,6 +93,7 @@ export const DesktopApp = ({}) => {
     const fetchAuthToken = useStore(state => state.authToken.fetch);
     const tokenLoading = useStore(state => state.authToken.loading);
     const token = useStore(state => state.authToken.data);
+    const approveCode = useStore(state => state.approveCode);
 
     useEffect(() => {
         userFetch();
@@ -128,6 +117,7 @@ export const DesktopApp = ({}) => {
         (async () => {
             const data = await authApprove(userId);
             if(data === undefined) return;
+            setStore(state => void (state.approveCode = data.code));
             setStep(2);
         })();
     }, [step, userId]);
@@ -139,7 +129,7 @@ export const DesktopApp = ({}) => {
             {step === 0 && <ScreenFirstStep onDone={() => setStep(1)}/>}
             {step === 1 && <ScreenCodeStep {...{token, tokenLoading, libquietLoaded, libquietProfile, step}}
                                            onDone={() => setStep(2)}/>}
-            {step === 2 && <ScreenSecondStep onDone={() => setStep(3)}/>}
+            {step === 2 && <ScreenSecondStep onDone={() => setStep(3)} approveCode={approveCode}/>}
             {step === 3 && <ScreenThirdStep onDone={() => setStep(4)}/>}
             <SoundTransmitter value={token} on={libquietLoaded && step === 1} profile={libquietProfile}/>
         </div>
