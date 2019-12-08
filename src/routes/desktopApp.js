@@ -58,10 +58,10 @@ const ScreenSecondStep = ({approveCode, onDone}) => <RosbankDesktopMockup
     </Typography>
     <Typography variant="h2">{approveCode}</Typography>
     <div style={{margin: '20px 10px'}}>
-        <Button variant="outlined" color="primary" style={{margin: '0 10px'}}>
+        <Button variant="outlined" color="primary" size="large" style={{margin: '0 10px', fontSize: '1.5rem'}}>
             Подписать сертификат
         </Button>
-        <Button variant="outlined" color="secondary" style={{margin: '0 10px'}}>
+        <Button variant="outlined" color="secondary" size="large" style={{margin: '0 10px', fontSize: '1.5rem'}}>
             Отменить
         </Button>
     </div>
