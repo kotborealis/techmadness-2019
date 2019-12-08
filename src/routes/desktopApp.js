@@ -16,25 +16,42 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
-import FirstStepMock from '../assets/IMG_1149.PNG';
-import SecondStepMock from '../assets/IMG_1150.PNG';
-import ThirdStepMock from '../assets/IMG_1152.PNG';
-import LogoMock from '../assets/photo_2019-12-07_22-27-35.jpg';
+import {RosbankDesktopMockup} from '../components/RosbankDesktopMockup';
 
-const ScreenFirstStep = ({onDone}) =>
-    <div>
-        <img src={FirstStepMock} width={1920} onClick={() => onDone()}/>
-    </div>;
-const ScreenSecondStep = ({onDone}) =>
-    <div>
-        <img src={LogoMock} width={1920} onClick={() => onDone()}/>
-        <img src={SecondStepMock} width={1920} onClick={() => onDone()}/>
-    </div>;
-const ScreenThirdStep = ({onDone}) =>
-    <div>
-        <img src={LogoMock} width={1920} onClick={() => onDone()}/>
-        <img src={ThirdStepMock} width={1920} onClick={() => onDone()}/>
-    </div>;
+const ScreenFirstStep = ({onDone}) => <RosbankDesktopMockup
+    onClick={onDone}
+    step={1}
+    totalSteps={4}
+    title={"Ознакомьтесь с условиями использования"}
+>
+</RosbankDesktopMockup>;
+
+const ScreenCodeStep = ({token, tokenLoading, libquietLoaded, libquietProfile, step, onDone}) => <RosbankDesktopMockup
+    onClick={onDone}
+    step={2}
+    totalSteps={4}
+    title={"Добавление устройства"}
+>
+    {!token && tokenLoading && <CircularProgress/>}
+    {token && <ScreenCode {...{token, libquietLoaded, libquietProfile, step}}/>}
+</RosbankDesktopMockup>;
+
+const ScreenSecondStep = ({onDone}) => <RosbankDesktopMockup
+    onClick={onDone}
+    step={3}
+    totalSteps={4}
+    title={"Для завершения регистрации подпишите сертификат"}
+>
+</RosbankDesktopMockup>;
+
+
+const ScreenThirdStep = ({onDone}) => <RosbankDesktopMockup
+    onClick={onDone}
+    step={4}
+    totalSteps={4}
+    title={"Вы успешно подключились! Пользуйтесь банком вне офиса."}
+>
+</RosbankDesktopMockup>;
 
 const AuthDescription = ({}) =>
     <Typography align="center">
@@ -119,16 +136,9 @@ export const DesktopApp = ({}) => {
 
     return (
         <div>
-            {(step === 0 || step === 1) && <ScreenFirstStep onDone={() => setStep(1)}/>}
-            {step === 1 && <Dialog open={true}>
-                <DialogTitle>Добавить устройство</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        {!token && tokenLoading && <CircularProgress/>}
-                        {token && <ScreenCode {...{token, libquietLoaded, libquietProfile, step}}/>}
-                    </DialogContentText>
-                </DialogContent>
-            </Dialog>}
+            {step === 0 && <ScreenFirstStep onDone={() => setStep(1)}/>}
+            {step === 1 && <ScreenCodeStep {...{token, tokenLoading, libquietLoaded, libquietProfile, step}}
+                                           onDone={() => setStep(2)}/>}
             {step === 2 && <ScreenSecondStep onDone={() => setStep(3)}/>}
             {step === 3 && <ScreenThirdStep onDone={() => setStep(4)}/>}
             <SoundTransmitter value={token} on={libquietLoaded && step === 1} profile={libquietProfile}/>
