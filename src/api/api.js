@@ -9,7 +9,7 @@ export const fetchAuthToken =
     async ({
                userId
            }) => {
-        const res = await fetch(apiUrl(`getToken`, {userId}), {method: "POST"});
+        const res = await fetch(apiUrl(`getToken`, {sessionId: userId}), {method: "POST"});
         const data = await res.json();
 
         if(!data.success) throw data;
@@ -17,9 +17,9 @@ export const fetchAuthToken =
         return data.content;
     };
 
-export const authApprove = (userId) => new Promise((resolve, reject) => {
-    if(!userId) return void resolve();
-    const sse = new EventSource(API_URL + `connectToApprove?userId=${userId}`);
+export const authApprove = (sessionId) => new Promise((resolve, reject) => {
+    if(!sessionId) return void resolve();
+    const sse = new EventSource(apiUrl(`connectToApprove`, {sessionId}));
     sse.addEventListener('message', (event) => {
         const data = JSON.parse(event.data);
         sse.close();
@@ -42,14 +42,7 @@ export const mobileApprove =
     };
 
 export const createUser =
-    async ({
-               firstName = "Boris",
-               lastName = "Eltsyn"
-           } = {}) => {
-
-
-        const res = await fetch(apiUrl(`createUser`, {firstName, lastName}), {method: "POST"});
-        const data = await res.json();
-
-        return data;
+    async () => {
+        const res = await fetch(apiUrl(`createSession`), {method: "POST"});
+        return await res.json();
     };
