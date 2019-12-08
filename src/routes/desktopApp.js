@@ -11,6 +11,7 @@ import MicIcon from '@material-ui/icons/Mic';
 import SpeakerPhoneIcon from '@material-ui/icons/SpeakerPhone';
 import {authApprove} from '../api/api';
 import {RosbankDesktopMockup} from '../components/RosbankDesktopMockup';
+import {DevicesList} from '../components/DevicesList/DevicesList';
 
 const ScreenFirstStep = ({onDone}) => <RosbankDesktopMockup
     onClick={onDone}
@@ -60,6 +61,9 @@ const ScreenThirdStep = ({onDone}) => <RosbankDesktopMockup
     totalSteps={4}
     title={"Вы успешно подключились! Пользуйтесь банком вне офиса."}
 >
+    <Typography variant="h5">Подключённые устройства:</Typography>
+    <br/>
+    <DevicesList/>
 </RosbankDesktopMockup>;
 
 const AuthDescription = ({}) =>
