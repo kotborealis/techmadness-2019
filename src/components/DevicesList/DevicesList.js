@@ -1,37 +1,62 @@
 import React from 'react';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import DeviceUnknownIcon from '@material-ui/icons/DeviceUnknown';
-import Divider from '@material-ui/core/Divider';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import CardActions from '@material-ui/core/CardActions';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
-        maxWidth: 360,
-        backgroundColor: theme.palette.background.paper,
+    },
+    card: {
+        minWidth: 275,
+    },
+    bullet: {
+        display: 'inline-block',
+        margin: '0 2px',
+        transform: 'scale(0.8)',
+    },
+    title: {
+        fontSize: 32,
+    },
+    pos: {
+        marginBottom: 12,
     },
 }));
 
 export const DevicesList = ({}) => {
     const classes = useStyles();
 
+
     return (
-        <div className={classes.root}>
-            <List>
-                <ListItem button>
-                    <ListItemIcon>
-                        <DeviceUnknownIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary="Samsung A50"/>
-                </ListItem>
-                <Divider/>
-                <ListItem button>
-                    <ListItemText primary="Добавить новое устройство"/>
-                </ListItem>
-            </List>
-        </div>
+        <Grid container className={classes.root}>
+            <Grid item xs={4} spacing={5}>
+                <Card className={classes.card}>
+                    <CardContent>
+                        <Typography className={classes.title} color="textSecondary" gutterBottom>
+                            Samsung A50
+                        </Typography>
+                    </CardContent>
+                    <CardActions>
+                        <Button size="small">Отвязать</Button>
+                    </CardActions>
+                </Card>
+            </Grid>
+            <Grid item xs={4} style={{marginLeft: '20px'}}>
+                <Card className={classes.card}>
+                    <CardContent>
+                        <Typography className={classes.title} color="textSecondary" gutterBottom>
+                            Добавить...
+                        </Typography>
+                    </CardContent>
+                    <CardActions>
+                        <Button size="small">Добавить</Button>
+                    </CardActions>
+                </Card>
+            </Grid>
+        </Grid>
     );
 };
