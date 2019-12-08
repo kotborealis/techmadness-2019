@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import Typography from '@material-ui/core/Typography';
 import usePreciseTimer from '../hooks/usePreciseTimer';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -82,6 +82,9 @@ const ScreenCode = ({token, libquietLoaded, libquietProfile, step, tokenLoading 
 
 
 export const DesktopApp = ({}) => {
+    const step = useStore(state => state.desktopStep);
+    const advanceStep = useStore(state => state.advanceDesktopStep);
+
     const setStore = useStore(state => state.set);
 
     const userFetch = useStore(state => state.user.fetch);
@@ -98,8 +101,6 @@ export const DesktopApp = ({}) => {
     useEffect(() => {
         userFetch();
     }, []);
-
-    const [step, setStep] = useState(0);
 
     usePreciseTimer(() => {
         if(step !== 1) return;
@@ -118,7 +119,7 @@ export const DesktopApp = ({}) => {
             const data = await authApprove(userId);
             if(data === undefined) return;
             setStore(state => void (state.approveCode = data.code));
-            setStep(2);
+            advanceStep();
         })();
     }, [step, userId]);
 
@@ -126,11 +127,11 @@ export const DesktopApp = ({}) => {
 
     return (
         <div>
-            {step === 0 && <ScreenFirstStep onDone={() => setStep(1)}/>}
+            {step === 0 && <ScreenFirstStep onDone={advanceStep}/>}
             {step === 1 && <ScreenCodeStep {...{token, tokenLoading, libquietLoaded, libquietProfile, step}}
-                                           onDone={() => setStep(2)}/>}
-            {step === 2 && <ScreenSecondStep onDone={() => setStep(3)} approveCode={approveCode}/>}
-            {step === 3 && <ScreenThirdStep onDone={() => setStep(4)}/>}
+                                           onDone={advanceStep}/>}
+            {step === 2 && <ScreenSecondStep onDone={advanceStep} approveCode={approveCode}/>}
+            {step === 3 && <ScreenThirdStep onDone={advanceStep}/>}
             <SoundTransmitter value={token} on={libquietLoaded && step === 1} profile={libquietProfile}/>
         </div>
     );
