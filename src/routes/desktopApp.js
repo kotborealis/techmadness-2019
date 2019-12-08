@@ -31,10 +31,12 @@ const ScreenCodeStep = ({token, tokenLoading, libquietLoaded, libquietProfile, s
             <>
                 {!token && tokenLoading && <CircularProgress/>}
                 {token && <>
-                    <QrViewer value={token} style={{width: '360px', height: 'auto'}}/>
-                    <Typography variant="h2">
+                    <QrViewer value={token} style={{width: '397px', height: 'auto'}}/>
+                    <Typography variant="h2" style={{textAlign: 'center', verticalAlign: 'center'}}>
                         <SpeakerPhoneIcon style={{fontSize: "4.5rem"}}/>
-                        {token ? token.slice(0, 6) : ''}
+                        <span style={{verticalAlign: 'middle'}}>
+                            {token ? token.slice(0, 6) : ''}
+                        </span>
                     </Typography>
                 </>}
             </>
