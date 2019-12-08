@@ -47,7 +47,13 @@ export const RosbankDesktopMockup = ({title, step, totalSteps, children, picture
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={4} style={{
+                        textAlign: "center",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center"
+                    }}>
                         {picture}
                     </Grid>
                 </Grid>
