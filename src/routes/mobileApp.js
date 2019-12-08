@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import Typography from '@material-ui/core/Typography';
 import {SoundReceiver} from '../components/SoundReceiver/SoundReceiver';
 import {useStore} from '../store/store';
@@ -92,16 +92,23 @@ export const MobileApp = ({}) => {
 
     const libquietLoaded = useStore(state => !state.libquietLoading);
 
+    const tokenRead = useRef(false);
     const [step, setStep] = useState(0);
     const [approveCode, setApproveCode] = useState(null);
 
     const handleToken = (source, token) => {
         if(!token) return;
+        if(tokenRead.current === true) return;
+
+        tokenRead.current = true;
 
         mobileApprove({token}).then(({code}) => {
             if(approveCode === null) setApproveCode(code);
             setStep(2);
-        }).catch(error => console.log(JSON.stringify(error)));
+        }).catch(error => {
+            tokenRead.current = false;
+            console.log("Failed to approve code", JSON.stringify(error));
+        });
     };
 
     return (
