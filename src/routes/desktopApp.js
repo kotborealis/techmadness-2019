@@ -19,6 +19,9 @@ const ScreenFirstStep = ({onDone}) => <RosbankDesktopMockup
     totalSteps={4}
     title={"Ознакомьтесь с условиями использования"}
 >
+    <Button variant="outlined" color="primary" size="large" style={{margin: '50px 10px', fontSize: '1.5rem'}}>
+        Я согласен с условиями
+    </Button>
 </RosbankDesktopMockup>;
 
 const ScreenCodeStep = ({token, tokenLoading, libquietLoaded, libquietProfile, step, onDone}) =>

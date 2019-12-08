@@ -42,7 +42,7 @@ export const RosbankDesktopMockup = ({title, step, totalSteps, children, picture
                                 <br/>
                                 <Typography variant="h2">{title}</Typography>
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={12} style={{margin: '25px 0'}}>
                                 {children}
                             </Grid>
                         </Grid>
