@@ -15,6 +15,7 @@ import {DevicesList} from '../components/DevicesList/DevicesList';
 import ScreenPicture1 from '../assets/1.jpg';
 import ScreenPicture2 from '../assets/2.jpg';
 import ScreenPicture3 from '../assets/3.jpg';
+import Zoom from '@material-ui/core/Zoom';
 
 const ScreenFirstStep = ({onDone}) => <RosbankDesktopMockup
     onClick={onDone}
@@ -38,7 +39,9 @@ const ScreenCodeStep = ({token, tokenLoading, libquietLoaded, libquietProfile, s
             <>
                 {!token && tokenLoading && <CircularProgress/>}
                 {token && <>
-                    <QrViewer value={token} style={{width: '360px', height: 'auto'}}/>
+                    <Zoom in={token && !tokenLoading}>
+                        <QrViewer value={token} style={{width: '360px', height: 'auto'}}/>
+                    </Zoom>
                     <Typography variant="h2" style={{textAlign: 'center', verticalAlign: 'center'}}>
                         <SpeakerPhoneIcon style={{fontSize: "4.5rem"}}/>
                         <span style={{verticalAlign: 'middle'}}>
