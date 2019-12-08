@@ -123,8 +123,6 @@ export const DesktopApp = ({}) => {
         })();
     }, [step, userId]);
 
-    console.log(token, tokenLoading);
-
     return (
         <div>
             {step === 0 && <ScreenFirstStep onDone={advanceStep}/>}
