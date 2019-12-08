@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import {useHistory} from "react-router-dom";
 
 function generatePinInput(pin, initial, error) {
     const line = [];
@@ -60,6 +61,8 @@ function generateKeypadButtons(pinHandler) {
 }
 
 export const KeyPad = ({initial = false}) => {
+    const history = useHistory();
+
     const [error, setError] = useState(false);
     const [pin, setPin] = useState([]);
 
@@ -70,7 +73,10 @@ export const KeyPad = ({initial = false}) => {
             setError(true);
             setPin(newPin);
             if(initial === true){
-                setTimeout(() => window.location = '/keypad', 500);
+                setTimeout(() => {
+                    setPin([]);
+                    history.push('/keypad');
+                }, 500);
             }
         }
         else{
@@ -115,7 +121,7 @@ export const KeyPad = ({initial = false}) => {
                             color: 'white',
                             borderColor: 'white'
                         }}
-                        onClick={() => void (window.location = '/mobile')}
+                        onClick={() => history.push('/mobile')}
                     >Забыли пинкод? :(</Button>
                 </Grid>}
             </Grid>
